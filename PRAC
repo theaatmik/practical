@@ -1,0 +1,131 @@
+method 1 for textual analysis 
+# Step 0: Install required packages (only once)
+install.packages("tidyverse")
+install.packages("tidytext")
+install.packages("wordcloud")
+install.packages("RColorBrewer")
+
+# Step 1: Load the packages — this is ESSENTIAL before using %>%
+library(tidyverse)
+library(tidytext)
+library(wordcloud)
+library(RColorBrewer)
+
+# Step 2: Create the sample data
+sample_data <- data.frame(text = c(
+  "The product quality is amazing and the service was fantastic!",
+  "Absolutely terrible experience, the purchase was a waste of money.",
+  "Value for money. Great service and overall good experience.",
+  "The quality of the product was poor. Not satisfied with the purchase.",
+  "Fantastic service, friendly staff and good value."),
+  stringsAsFactors = FALSE)
+
+# Step 3: Tokenize the text
+tidy_text <- sample_data %>%
+  unnest_tokens(word, text)
+
+# Step 4: Remove stop words
+data("stop_words")
+tidy_text_clean <- tidy_text %>%
+  anti_join(stop_words, by = "word")
+
+# Step 5: Calculate word frequency
+word_freq <- tidy_text_clean %>%
+  count(word, sort = TRUE)
+
+# Step 6: Display top 10 words
+print(head(word_freq, 10))
+
+# Step 7: Bar plot for top 10 words
+word_freq %>%
+  slice_max(order_by = n, n = 10) %>%
+  ggplot(aes(x = reorder(word, n), y = n)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  coord_flip() +
+  labs(title = "Top 10 Most Frequent Words",
+       x = "Words",
+       y = "Frequency") +
+  theme_minimal()
+
+# Step 8: Word cloud
+set.seed(1234)
+wordcloud(words = word_freq$word,
+          freq = word_freq$n,
+          min.freq = 1,
+          max.words = 100,
+          random.order = FALSE,
+          colors = brewer.pal(8, "Dark2"))
+
+
+method 2 for textual analysis 
+
+Text Mining Without %>% (No Pipes Needed)
+# Install required packages
+install.packages("tidytext")
+install.packages("dplyr")
+install.packages("wordcloud")
+install.packages("RColorBrewer")
+install.packages("ggplot2")
+
+# Load libraries
+library(tidytext)
+library(dplyr)
+library(wordcloud)
+library(RColorBrewer)
+library(ggplot2)
+
+# Create sample data
+sample_data <- data.frame(text = c(
+  "The product quality is amazing and the service was fantastic!",
+  "Absolutely terrible experience, the purchase was a waste of money.",
+  "Value for money. Great service and overall good experience.",
+  "The quality of the product was poor. Not satisfied with the purchase.",
+  "Fantastic service, friendly staff and good value."),
+  stringsAsFactors = FALSE)
+
+# Step 1: Tokenize the text
+tidy_text <- unnest_tokens(sample_data, word, text)
+
+# Step 2: Remove stop words
+data("stop_words")
+tidy_text_clean <- anti_join(tidy_text, stop_words, by = "word")
+
+# Step 3: Calculate word frequency
+word_freq <- count(tidy_text_clean, word, sort = TRUE)
+
+# Step 4: Show top 10 frequent words
+print(head(word_freq, 10))
+
+# Step 5: Bar plot for top 10 words
+top_words <- head(word_freq, 10)
+ggplot(top_words, aes(x = reorder(word, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Most Frequent Words", x = "Words", y = "Frequency") +
+  theme_minimal()
+
+# Step 6: Word cloud
+set.seed(1234)
+wordcloud(words = word_freq$word,
+          freq = word_freq$n,
+          min.freq = 1,
+          max.words = 100,
+          random.order = FALSE,
+          colors = brewer.pal(8, "Dark2"))
+
+regression in r 
+
+Advertising_data <- data.frame(
+   Advertisingspend = c(100,200,300,400,500,600,700,800),
+   sales = c(20,24,30,36,40,45,50,55))
+
+model <- lm(sales ~ Advertisingspend, data = Advertising_data)
+summary(model)
+
+plot(Advertising_data$Advertisingspend, Advertising_data$sales,
+     main = "sales vs Advertising spend",
+     xlab = "advertising spend", ylab= "sales",pch=19)
+abline(model, col= "black", lwd = 2)
+
+
+
